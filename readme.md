@@ -80,6 +80,8 @@ local_costmap_params-update_frequency: 局部路径更新频率
 local_costmap_params-publish_frequency:局部路径发布频率
 
 
+# 代码链接
+https://yunshitu.coding.net/p/navigation_and_planning/d/lio_sam_move_base_tutorial/git
 
 # 参考
 
