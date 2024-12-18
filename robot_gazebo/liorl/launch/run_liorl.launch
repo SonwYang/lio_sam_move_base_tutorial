@@ -1,0 +1,48 @@
+<launch>
+
+    <arg name="project" default="liorl"/>
+    
+    <!-- Parameters -->
+    <rosparam file="$(find liorl)/config/lio_sam_my.yaml" command="load" />
+
+    <!--- LOAM -->
+    <include file="$(find liorl)/launch/include/module_loam.launch" />
+
+    <!--- Robot State TF -->
+    <!-- <include file="$(find liorl)/launch/include/module_robot_state_publisher.launch" /> -->
+
+    <!--- Run Navsat -->
+    <!-- <include file="$(find liorl)/launch/include/module_navsat.launch" /> -->
+
+    <!--- Run Rviz-->
+    <include file="$(find liorl)/launch/include/module_rviz.launch" />
+    <!-- <node name="liorl_odom2gnss" pkg="liorl" type="liorl_odom2gnss" output="screen"/> -->
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+
+        <remap from="cloud_in" to="/liorl/deskew/cloud_deskewed"/>
+        <rosparam>
+            target_frame: base_link_est # Leave disabled to output scan in pointcloud frame
+            transform_tolerance: 0.01
+            min_height: -0.5
+            max_height: 0.2
+
+            angle_min: -3.1415926 # -M_PI
+            angle_max: 3.1415926 # M_PI
+            angle_increment: 0.003 # M_PI/360.0
+            scan_time: 0.1
+            range_min: 0.3
+            range_max: 50
+            use_inf: true
+            inf_epsilon: 1.0
+
+            # Concurrency level, affects number of pointclouds queued for processing and number of threads used
+            # 0 : Detect number of cores
+            # 1 : Single threaded
+            # 2->inf : Parallelism level
+            concurrency_level: 1
+        </rosparam>
+
+    </node>
+
+</launch>
